@@ -1,0 +1,5 @@
+"Model","AIC","BIC","Deviance","N_Params","Test_AUC","Test_Accuracy"
+"Model 0: Null",2145.9,2152.8,2143.9,1,0.5,0.965
+"Model 1: Raw Variables",2115.4,2252.5,2075.4,20,0.643,0.965
+"Model 2: Business Engineered",2119.2,2270,2075.2,22,0.635,0.965
+"Model 3: Stepwise (Final)",2103.8,2179.1,2081.8,11,0.639,0.965
