@@ -328,10 +328,17 @@ df <- df_raw %>%
                      labels = c("18-29", "30-39", "40-49", "50-59", "60+")),
 
     # Duration bucketed for EDA storytelling only — duration stays continuous
-    # in the model (see Checkpoint 2 univariate screen for the justification)
+    # in the model (see Checkpoint 2 univariate screen for the justification).
+    # NOTE: the observed window is narrow (~2.0-3.0 years, since every policy
+    # in this extract incepted in 2022), so fixed annual breaks collapsed
+    # ~100% of the portfolio into a single "2-3yr" bin. Quantile-based bins
+    # are used instead, so each band contains a comparable share of the
+    # portfolio and the chart can actually show a gradient.
     duration_band = cut(policy_duration_years,
-                         breaks = c(0, 1, 2, 3, 4, Inf),
-                         labels = c("<1yr", "1-2yr", "2-3yr", "3-4yr", "4yr+"))
+                         breaks = quantile(policy_duration_years,
+                                            probs = seq(0, 1, length.out = 6),
+                                            na.rm = TRUE),
+                         include.lowest = TRUE)
   ) %>%
 
   # --- ENGINEER TARGET VARIABLE: Lapsed (1 = lapsed, 0 = active) ---
@@ -390,7 +397,7 @@ assumption_grounding <- data.frame(
                 "+ lapse risk", "- lapse risk", "+ lapse risk", "+ lapse risk", "- lapse risk"),
   Supporting_Concept = c(
     "Premium affordability / financial stress",
-    "Policy persistency (SOA experience studies)",
+    "Policy persistency / duration effects",
     "Customer mobility and switching behaviour",
     "Risk profile and behavioural characteristics",
     "Product lapse characteristics (no cash-value lock-in)",
@@ -603,13 +610,20 @@ p_duration <- ggplot(r6_tbl, aes(x = duration_band, y = lapse_rate, group = 1)) 
   geom_text(aes(label = percent(lapse_rate, accuracy = 0.1)), vjust = -0.8, size = 3.2) +
   scale_y_continuous(labels = percent_format(), limits = c(0, max(r6_tbl$lapse_rate) * 1.3)) +
   labs(title = "Policy Duration and Its Relationship with Policy Persistency",
-       subtitle = "Business question: when in a policy's life is lapse risk highest?",
-       x = "Policy Duration Band", y = "Lapse Rate")
+       subtitle = "Business question: within this portfolio's narrow observed window (~2.0-3.0 years), does lapse risk still vary by duration?",
+       x = "Policy Duration (quantile bands, years)", y = "Lapse Rate") +
+  theme(axis.text.x = element_text(angle = 20, hjust = 1))
 print(p_duration)
 save_fig(p_duration, "03_lapse_rate_by_duration.png")
-cat("  Figure 3 caption: customers with shorter policy durations demonstrate\n")
-cat("  higher lapse rates, supporting the hypothesis that early policy years\n")
-cat("  are critical for retention — consistent with SOA experience studies.\n\n")
+cat("  Figure 3 caption: because every policy in this extract was incepted in\n")
+cat("  2022, the observed window spans only ~1 year (2.0-3.0 years of\n")
+cat("  duration) rather than a full policy lifecycle. Quantile-based bands are\n")
+cat("  used here (replacing fixed annual bins, which collapsed almost the\n")
+cat("  entire portfolio into a single '2-3yr' category) to reveal the duration\n")
+cat("  gradient present within that narrow window. This gradient reflects the\n")
+cat("  duration term built into the synthetic label (Section 3) rather than\n")
+cat("  genuine multi-year persistency experience — see Section 6 for the\n")
+cat("  equivalent caveat on the Kaplan-Meier curve.\n\n")
 
 # --- 5e. Distributions of Key Numeric Variables ---
 
@@ -732,7 +746,7 @@ cat("status at the 5% level.\n")
 
 banner("KEY FINDINGS FROM EXPLORATORY ANALYSIS")
 cat("- Policy duration: lapse rates are highest in the earliest duration bands,\n")
-cat("  consistent with SOA experience studies (Figure 3).\n")
+cat("  consistent with established policy persistency concepts (Figure 3).\n")
 cat(sprintf("- Age: %s has the highest lapse rate among age groups (%.1f%%), supporting\n",
             (r5$table %>% arrange(desc(lapse_rate)) %>% slice(1))$age_group,
             (r5$table %>% arrange(desc(lapse_rate)) %>% slice(1))$lapse_rate * 100))
