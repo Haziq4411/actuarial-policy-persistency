@@ -147,7 +147,7 @@ save_base_plot <- function(plot_expr, filename, width = 2400, height = 2000, res
 # root as the working directory (e.g. open the .Rproj / repo folder in
 # RStudio, or setwd() to the repo root first).
 
-data_path <- "data/life_insurance_retention_dataset.csv"
+data_path <- "data/life_insurance_retention_dataset_full.csv"
 
 if (!file.exists(data_path)) {
   stop(sprintf(
