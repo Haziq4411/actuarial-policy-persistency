@@ -403,7 +403,7 @@ install.packages(c("tidyverse", "caret", "pROC", "survival", "survminer",
                     "corrplot", "broom", "ResourceSelection", "car",
                     "gridExtra", "scales"))
 
-source("persistency_modelling.R")
+source("Policy_Persistency_Modelling.R")
 ```
 
 The dataset is provided together with documentation describing its synthetic nature and modelling assumptions.
