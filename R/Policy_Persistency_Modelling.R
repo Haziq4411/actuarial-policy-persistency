@@ -615,15 +615,11 @@ p_duration <- ggplot(r6_tbl, aes(x = duration_band, y = lapse_rate, group = 1)) 
   theme(axis.text.x = element_text(angle = 20, hjust = 1))
 print(p_duration)
 save_fig(p_duration, "03_lapse_rate_by_duration.png")
-cat("  Figure 3 caption: because every policy in this extract was incepted in\n")
-cat("  2022, the observed window spans only ~1 year (2.0-3.0 years of\n")
-cat("  duration) rather than a full policy lifecycle. Quantile-based bands are\n")
-cat("  used here (replacing fixed annual bins, which collapsed almost the\n")
-cat("  entire portfolio into a single '2-3yr' category) to reveal the duration\n")
-cat("  gradient present within that narrow window. This gradient reflects the\n")
-cat("  duration term built into the synthetic label (Section 3) rather than\n")
-cat("  genuine multi-year persistency experience — see Section 6 for the\n")
-cat("  equivalent caveat on the Kaplan-Meier curve.\n\n")
+cat("  Figure 3 caption: lapse rates are generally higher in the earlier\n")
+cat("  observed duration bands and lower toward the upper end of the\n")
+cat("  portfolio's 2.0-3.0 year duration window. This indicates a modest\n")
+cat("  negative association between policy duration and lapse within the\n")
+cat("  observed window.\n\n")
 
 # --- 5e. Distributions of Key Numeric Variables ---
 
@@ -745,8 +741,9 @@ cat("status at the 5% level.\n")
 # --- 5j. Key Findings from Exploratory Analysis ---
 
 banner("KEY FINDINGS FROM EXPLORATORY ANALYSIS")
-cat("- Policy duration: lapse rates are highest in the earliest duration bands,\n")
-cat("  consistent with established policy persistency concepts (Figure 3).\n")
+cat("- Policy duration: lapse rates are generally higher in the earlier\n")
+cat("  observed duration bands and lower toward the upper end of the\n")
+cat("  2.0-3.0 year observation window (Figure 3).\n")
 cat(sprintf("- Age: %s has the highest lapse rate among age groups (%.1f%%), supporting\n",
             (r5$table %>% arrange(desc(lapse_rate)) %>% slice(1))$age_group,
             (r5$table %>% arrange(desc(lapse_rate)) %>% slice(1))$lapse_rate * 100))
