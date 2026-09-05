@@ -323,9 +323,9 @@ actuarial-policy-persistency/
 ├── README.md
 │
 ├── data/
-│   └── life_insurance_retention_dataset.csv
+│   └── life_insurance_retention_dataset_full.csv
 │
-├── persistency_modelling.R
+├── Policy_Persistency_Modelling.R
 │
 ├── figures/
 │   ├── 00_target_class_distribution.png
